@@ -10,8 +10,9 @@ The overall flow is:
 
 # Notes
 - We are using threads so we can get user input while listening for messages
-    (stack overflow page)
-    (stack overflow answer)
+ - Idea from:
+  - http://stackoverflow.com/questions/22240533/display-output-while-inside-of-raw-input
+  - http://stackoverflow.com/a/22240617
 - The Queue library handles locking between threads
 
 # Run the code

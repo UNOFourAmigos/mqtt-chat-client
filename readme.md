@@ -1,3 +1,18 @@
+# What it does
+This is a MQTT chat client that will communicate with other MQTT chat clients via an MQTT server.
+
+It is basically a shell around the MQTT python library which provides a text-based interface for sending and recieving messages over MQTT.
+The overall flow is:
+1. Subscribe to the user-specified channel on the user-specified, in order to receive messages
+2. Display messages 
+2. Wait for user input, and publish messages to the channel
+ This client can publish messages to a channel. to a ch simultaneously subscribe to a channel on a connect to a MQTT server, and communicate with it.
+
+# Notes
+- We are using threads so we can get user input while listening for messages
+    (stack overflow page)
+    (stack overflow answer)
+- The Queue library handles locking between threads
 
 # Run the code
 1. `git pull`, download, or clone this project (git clone <github URL>)

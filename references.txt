@@ -1,0 +1,3 @@
+http://www.hivemq.com/blog/mqtt-essentials-part-1-introducing-mqtt - helpful
+http://www.hivemq.com/blog/how-to-get-started-with-mqtt - not that helpful
+https://hbmqtt.readthedocs.io/en/latest/references/mqttclient.html

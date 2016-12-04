@@ -9,6 +9,10 @@ from hbmqtt import client as hbmqttclient
 from threading import Thread
 import queue
 from time import sleep
+from random import random
+
+# Get random 10 digit string of numbers
+CLIENT_ID = ("%.10f" % random())[2:]
 
 MQTT_BROKER_URI = "mqtt://localhost:1883"
 inputQueue = queue.Queue()
@@ -46,14 +50,27 @@ def beginMQTTClient():
     yield from client.connect(MQTT_BROKER_URI)
     yield from client.subscribe([("blue", hbmqtt.mqtt.constants.QOS_0)])
     while True:
-        msg = yield from client.deliver_message()
-        # Help from internal python docs on bytearray
-        rawStrMsg = msg.data.decode("utf-8")
-        clientId = rawStrMsg[0]
-        textMessage = rawStrMsg[1:]
+        weGotMail = False
+        try:
+            msg = yield from client.deliver_message(timeout=.1)
+            weGotMail = True
+        except asyncio.TimeoutError:
+            print("No message received")
 
-        print("Message received from client " + clientId + ": " + textMessage)
+        if weGotMail:
+            # Help from internal python docs on bytearray
+            rawStrMsg = msg.data.decode("utf-8")
+            clientId = rawStrMsg[0:10]
+            textMessage = rawStrMsg[10:]
 
+            # Ignore messages sent by us
+            if clientId == CLIENT_ID:
+                continue
+
+            print("Message received from client " + clientId + ": " + textMessage)
+            response = CLIENT_ID + "Thanks!"
+            yield from client.publish("blue", bytearray(response, "utf-8"))
+            # "blue", "Why thank you", client " + clientId + " for sending us " + textMessage"
 
 asyncio.get_event_loop().run_until_complete(beginMQTTClient())
 

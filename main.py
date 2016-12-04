@@ -55,7 +55,7 @@ def beginMQTTClient():
             msg = yield from client.deliver_message(timeout=.1)
             weGotMail = True
         except asyncio.TimeoutError:
-            print("No message received")
+            pass
 
         if weGotMail:
             # Help from internal python docs on bytearray

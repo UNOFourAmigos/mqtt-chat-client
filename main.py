@@ -11,8 +11,9 @@ import queue
 from time import sleep
 from random import random
 
-# Get random 10 digit string of numbers
-CLIENT_ID = ("%.10f" % random())[2:]
+CLIENT_ID_LENGTH = 5
+# Get random CLIENT_ID_LENGTH digit string of numbers
+CLIENT_ID = (("%." + str(CLIENT_ID_LENGTH) + "f") % random())[2:]
 
 MQTT_BROKER_URI = "mqtt://localhost:1883"
 inputQueue = queue.Queue()
@@ -39,10 +40,11 @@ def getNextInputLine():
         inputLine = input()
         inputQueue.put(inputLine)
 
-# inputThread = Thread(target=getNextInputLine)
-# inputThread.start()
+inputThread = Thread(target=getNextInputLine)
+inputThread.start()
 
-
+print("Hello! You are client " + CLIENT_ID)
+print()
 
 @asyncio.coroutine
 def beginMQTTClient():
@@ -57,19 +59,30 @@ def beginMQTTClient():
         except asyncio.TimeoutError:
             pass
 
+        # Handle local user trying to send a message
+        try:
+            inputLine = inputQueue.get_nowait()
+            # print("Oh hey! A message from the user:")
+            # print(inputLine)
+            response = CLIENT_ID + " " + inputLine
+            yield from client.publish("blue", bytearray(response, "utf-8"))
+
+        except queue.Empty:
+            pass # No new user input
+
         if weGotMail:
             # Help from internal python docs on bytearray
             rawStrMsg = msg.data.decode("utf-8")
-            clientId = rawStrMsg[0:10]
-            textMessage = rawStrMsg[10:]
+            clientId = rawStrMsg[0:CLIENT_ID_LENGTH]
+            textMessage = rawStrMsg[CLIENT_ID_LENGTH+1:]
 
             # Ignore messages sent by us
             if clientId == CLIENT_ID:
                 continue
 
-            print("Message received from client " + clientId + ": " + textMessage)
-            response = CLIENT_ID + "Thanks!"
-            yield from client.publish("blue", bytearray(response, "utf-8"))
+            print("Client " + clientId + ": " + textMessage)
+            # response = CLIENT_ID + "Thanks!"
+            # yield from client.publish("blue", bytearray(response, "utf-8"))
             # "blue", "Why thank you", client " + clientId + " for sending us " + textMessage"
 
 asyncio.get_event_loop().run_until_complete(beginMQTTClient())

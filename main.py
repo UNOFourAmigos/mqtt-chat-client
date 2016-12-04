@@ -1,6 +1,7 @@
 """Main python file for chat client"""
 # This is meant to run in Python 3, not Python 2
-# DISCLAIMER: Some code borrowed from hbmqtt library example documentation:
+# DISCLAIMER: Some code based on ideas hbmqtt documentation,
+# and some from code borrowed from hbmqtt example code:
 # https://hbmqtt.readthedocs.io/en/latest/references/mqttclient.html
 
 import asyncio
@@ -15,7 +16,10 @@ CLIENT_ID_LENGTH = 5
 # Get random CLIENT_ID_LENGTH digit string of numbers
 CLIENT_ID = (("%." + str(CLIENT_ID_LENGTH) + "f") % random())[2:]
 
-MQTT_BROKER_URI = "mqtt://localhost:1883"
+# MQTT_BROKER_URI = "mqtt://localhost:1883"
+MQTT_BROKER_URI = "mqtt://broker.hivemq.com:1883"
+CHANNEL_ID = "unofouramigos/chat1"
+
 inputQueue = queue.Queue()
 
 # - We are using threads so we can get user input while listening for messages
@@ -50,7 +54,7 @@ print()
 def beginMQTTClient():
     client = hbmqttclient.MQTTClient()
     yield from client.connect(MQTT_BROKER_URI)
-    yield from client.subscribe([("blue", hbmqtt.mqtt.constants.QOS_0)])
+    yield from client.subscribe([(CHANNEL_ID, hbmqtt.mqtt.constants.QOS_0)])
     while True:
         weGotMail = False
         try:
@@ -65,7 +69,7 @@ def beginMQTTClient():
             # print("Oh hey! A message from the user:")
             # print(inputLine)
             response = CLIENT_ID + " " + inputLine
-            yield from client.publish("blue", bytearray(response, "utf-8"))
+            yield from client.publish(CHANNEL_ID, bytearray(response, "utf-8"))
 
         except queue.Empty:
             pass # No new user input

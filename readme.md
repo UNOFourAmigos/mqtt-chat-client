@@ -21,7 +21,7 @@ The overall flow is:
 2. `source venv/bin/activate` to change into the virtual python environment
 3. `python main.py` to run the code!
 
-# Mac Visual Studio Code Development Setup (add more steps here)
+# Mac Visual Studio Code Development Setup (steps incomplete)
 1. Download and install Visual Studio Code for Mac
 2. Download (or clone) this project from GitHub to your computer (git clone https://github.com/UNOFourAmigos/mqtt-chat-client)
 3. Open this project in Visual Studio (File, Open..., Navigate to the folder)

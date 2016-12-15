@@ -91,19 +91,4 @@ def beginMQTTClient():
 
 asyncio.get_event_loop().run_until_complete(beginMQTTClient())
 
-# while True:
-    # x = client.deliver_message()
-    # print("Message received!")
-    # print x
-
-# for i in range(100):
-#     # Try to get user input
-#     try:
-#         inputLine = inputQueue.get_nowait()
-#         print("Oh hey! A message from the user:")
-#         print(inputLine)
-#     except queue.Empty:
-#         pass # No new user input
-#     print(i)
-#     sleep(.2)
 

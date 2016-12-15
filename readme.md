@@ -1,5 +1,5 @@
 # What it does
-This is a MQTT chat client that will communicate with other MQTT chat clients via an MQTT server.
+This is a MQTT chat client that will communicate with other MQTT chat clients via an MQTT broker/server.
 
 It is basically a shell around the MQTT python library which provides a text-based interface for sending and recieving messages over MQTT.
 

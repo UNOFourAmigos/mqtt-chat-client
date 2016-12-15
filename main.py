@@ -1,8 +1,9 @@
 """Main python file for chat client"""
 # This is meant to run in Python 3, not Python 2
-# DISCLAIMER: Some code based on ideas hbmqtt documentation,
+# DISCLAIMER: Some code based on ideas from hbmqtt documentation,
 # and some from code borrowed from hbmqtt example code:
 # https://hbmqtt.readthedocs.io/en/latest/references/mqttclient.html
+# Josiah Krutz
 
 import asyncio
 import hbmqtt
